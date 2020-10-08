@@ -1,0 +1,15 @@
+{
+    "name": "wiiin0de/dom-nginx",
+    "authors": [
+        {
+            "name": "Wildan M",
+            "email": "willnode@wellosoft.net"
+        }
+    ],
+    "require": {
+        "madkom/nginx-configurator": "1.0.0-RC1",
+        "vlucas/phpdotenv": "^5.2"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
