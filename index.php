@@ -134,11 +134,10 @@ if (!$found) {
 $nginx_body = str_replace("\n", "\n\t", trim($nginx_builder->dump()));
 $nginx_new = $nginx_head . $nginx_body . $nginx_foot;
 file_put_contents($_SERVER['NGINX_PATH'], $nginx_new, LOCK_EX);
-// validate
+// validate (if success, NginX will immeditealy restart, so nothing sent.)
 if (strpos($debug = updateNginx($target, $d['root']), 'invalid') !== false) {
     // oops. fallback.
     file_put_contents($_SERVER['NGINX_PATH'], $nginx_file, LOCK_EX);
     echo "\n\nERROR: YOUR NGINX CONFIGURATION IS INVALID! IT HAS BEEN ROLLED BACK.";
     echo "\nError ".explode("\n", substr($debug, strpos($debug, 'invalid')), 2)[0]."\n";
-    updateNginx($target, $d['root']);
 }

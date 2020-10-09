@@ -50,6 +50,7 @@ function mergeConfig($config)
 
 function updateNginx($domain, $home)
 {
+    // Virtualmin can attempt to validate before reload, so let's use it.
     $home = explode('/', '-'.$home, 4)[3] ?? 'public_html';
     $ch = curl_init($_SERVER['VIRTUALMIN_PATH']."?program=modify-web&domain=$domain&document-dir=$home");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
