@@ -127,6 +127,7 @@ if (!$found) {
 $nginx_body = str_replace("\n", "\n\t", trim($nginx_builder->dump()));
 $nginx_new = $nginx_head . $nginx_body . $nginx_foot;
 file_put_contents($_SERVER['NGINX_PATH'], $nginx_new, LOCK_EX);
+ob_flush(); // because nginx will immediately restart
 // validate
 if (strpos($debug = updateNginx($target, $d['root']), 'invalid') !== false) {
     // oops. fallback.
