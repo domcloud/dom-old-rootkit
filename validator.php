@@ -2,7 +2,7 @@
 
 function isParamValid($p)
 {
-    return preg_match("/^[^a-zA-Z0-9_\.\/~*^$+=: ]+$/", "", $p);
+    return preg_match("/^[a-zA-Z0-9_\.\/~*^$+=: ]+$/", $p);
 }
 
 function mergeConfig($config)
@@ -20,7 +20,7 @@ function mergeConfig($config)
             // '404 /404.html'
         ],
     ];
-    if ($config && ($config = json_decode($config))) {
+    if ($config && ($config = json_decode($config, true))) {
         $c = array_merge_recursive($c, $config);
     }
     // validate config
