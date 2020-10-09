@@ -133,5 +133,5 @@ if (strpos($debug = updateNginx($target, $d['root']), 'invalid') !== false) {
     file_put_contents($_SERVER['NGINX_PATH'], $nginx_file, LOCK_EX);
     updateNginx($target, $d['root']);
     echo "\n\nERROR: YOUR NGINX CONFIGURATION IS INVALID! IT HAS BEEN ROLLED BACK.";
-    echo "\nError detail".explode("\n", substr($debug, strpos($debug, 'invalid')), 2)[0];
+    echo "\nError ".explode("\n", substr($debug, strpos($debug, 'invalid')), 2)[0]."\n";
 }
