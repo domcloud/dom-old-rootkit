@@ -1,11 +1,32 @@
 server {
 	server_name <?= $d['dom'] ?>;
+	<?php if ($c['ssl'] !== 'enforce') : ?>
 	listen <?= $d['ip'] ?>;
 	listen <?= $d['ip6'] ?>;
+	<?php endif ?>
 	root <?= $d['root'] ?>;
 	index <?= $c['index'] ?>;
 	access_log <?= $d['access_log'] ?>;
 	error_log <?= $d['error_log'] ?>;
+	<?php if (!empty($c['passenger'])) : ?>
+	<?php
+	foreach ([
+		'enabled', 'app_env', 'app_type',
+		'startup_file', 'ruby', 'nodejs', 'python',
+		'meteor_app_settings', 'friendly_error_pages',
+	] as $key) {
+		if (!empty($c['passenger'][$key])) {
+			echo "\tpassenger_$key ".$c['passenger'][$key].";\n";
+		}
+	}
+	foreach (($c['passenger']['env_vars'] ?? []) as $env) {
+		echo "\tpassenger_env_var ".$env.";\n";
+	}
+	if (!empty($c['passenger']['app_start_command'])) {
+		echo "\tpassenger_app_start_command ".escapeshellarg($c['passenger']['app_start_command']).";\n";
+	}
+	?>
+	<?php else : ?>
 	fastcgi_param GATEWAY_INTERFACE CGI/1.1;
 	fastcgi_param SERVER_SOFTWARE nginx;
 	fastcgi_param QUERY_STRING $query_string;
@@ -25,22 +46,28 @@ server {
 	fastcgi_param SERVER_NAME $server_name;
 	fastcgi_param PATH_INFO $fastcgi_path_info;
 	fastcgi_param HTTPS $https;
+	fastcgi_split_path_info ^(.+\.php)(/.+)$;
+	<?php endif ?>
     <?php foreach ($c['error_pages'] as $e) : ?>
     error_page <?= $e ?>;
     <?php endforeach ?>
     <?php foreach ($c['locations'] as $l) : ?>
     location <?= $l['match'] ?> {
-        <?= isset($l['try_files']) ? "try_files $l[try_files];" : '' ?>
-
-        <?= isset($l['fastcgi_pass']) ? "fastcgi_pass $l[fastcgi_pass];" : '' ?>
-
-        <?= isset($l['return']) ? "return $l[return];" : '' ?>
-
+		<?php
+		foreach ([
+			'try_files', 'fastcgi_pass', 'return',
+		] as $key) {
+			if (isset($l[$key])) {
+				echo "\t$key ".$l[$key].";\n";
+			}
+		}
+		?>
 	}
     <?php endforeach ?>
-	fastcgi_split_path_info ^(.+\.php)(/.+)$;
+	<?php if ($c['ssl'] !== 'off') : ?>
 	listen <?= $d['ip'] ?>:443 ssl;
 	listen <?= $d['ip6'] ?>:443 ssl;
+    <?php endif ?>
     <?php if (isset($d['ssl'])) : ?>
 	ssl_certificate <?= $d['ssl']['cert'] ?>;
 	ssl_certificate_key <?= $d['ssl']['key'] ?>;

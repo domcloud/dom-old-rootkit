@@ -87,10 +87,11 @@ foreach ($nginx_conf->getIterator() as $n) {
                 return;
             }
             // extract data
-            $d['dom'] = extractParameters(extractDirective($n, 'server_name')[0])[0];
-            $listen = extractDirective($n, 'listen');
-            $d['ip'] = extractParameters($listen[0])[0];
-            $d['ip6'] = extractParameters($listen[1])[0];
+            $d['dom'] = $target;
+            foreach (extractDirective($n, 'listen') as $ips) {
+                $ip = str_replace(':443', '', extractParameters($ips)[0]);
+                $d[$ip[0] === '[' ? 'ip6' : 'ip'] = $ip;
+            }
             $d['root'] = extractParameters(extractDirective($n, 'root')[0])[0];
             $d['index'] = extractParameters(extractDirective($n, 'index')[0])[0];
             $d['access_log'] = extractParameters(extractDirective($n, 'access_log')[0])[0];

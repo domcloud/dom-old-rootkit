@@ -8,6 +8,24 @@ function isParamValid($p)
 function mergeConfig($config)
 {
     $c = [
+        'ssl' => 'on', // [off|on|enforce]
+        'passenger' => [
+            /*
+                The only config you care is "enabled"
+                If you use GLS, you can also specify "app_start_command"
+            */
+            // 'enabled' => 'off', // [off (default)|on]
+            // 'app_env' => 'production', // [production (default)|development]
+            // 'app_start_command' =>  'app --port $PORT' // (explicit)
+            // 'app_type' =>  '' // (this autodetects)
+            // 'startup_file' => '' // (this autodetects)
+            // 'env_vars' => [ '', '' ] // (envs)
+            // 'ruby' => 'ruby', // (for rvm users)
+            // 'nodejs' => 'node', // (for nvm users)
+            // 'python' => 'python3', // (for pipenv users)
+            // 'meteor_app_settings' => '', // (for meteors users)
+            // 'friendly_error_pages' => 'on', // [off|on (default)]
+        ],
         'index' => 'index.html index.htm index.php',
         'locations' => [
             // [
@@ -17,13 +35,17 @@ function mergeConfig($config)
             // ]
         ],
         'error_pages' => [
-            // '404 /404.html'
+            // '404 /404.html',
+            // '500 503 /50x.html',
         ],
     ];
     if ($config && ($config = json_decode($config, true))) {
         $c = array_merge_recursive($c, $config);
     }
     // validate config
+    if (!empty($c['passenger'])) {
+
+    }
     $c['locations'] = array_values(array_filter(array_map(function ($x) {
         return array_map(function ($y) {
             return trim($y);
