@@ -47,3 +47,14 @@ function mergeConfig($config)
     $c['index'] = $c['index'] && isParamValid($c['index']) ? trim($c['index']) : 'index.html index.htm index.php';
     return $c;
 }
+
+function updateNginx($domain, $home)
+{
+    $home = explode('/', '-'.$home, 4)[3] ?? 'public_html';
+    $ch = curl_init($_SERVER['VIRTUALMIN_PATH']."?domain=$domain&document-dir=$home");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_USERPWD, $_SERVER['VIRTUALMIN_AUTH']);
+    $response = curl_exec($ch);
+    curl_close($ch);
+    return $response;
+}

@@ -55,6 +55,7 @@ function extractParameters($directive)
 
 
 // parse config files
+$found = false;
 $target = $_GET['domain'];
 $nginx_builder = new Builder();
 $nginx_head = explode("server {", $nginx_file, 2);
@@ -111,13 +112,19 @@ foreach ($nginx_conf->getIterator() as $n) {
             echo $file;
             $file = str_replace("\t", "", $file);
             $nginx_builder->appendServerNode(iterator_to_array((new Parser())->parse($file)->getIterator())[0]);
+            $found = true;
         } else {
             $nginx_builder->appendServerNode($n);
         }
     }
 }
 
+if (!$found) {
+    echo 'domain not found';
+    exit;
+}
 // dump
 $nginx_body = str_replace("\n", "\n\t", trim($nginx_builder->dump()));
 $nginx = $nginx_head . $nginx_body . $nginx_foot;
 file_put_contents($_SERVER['NGINX_PATH'], $nginx, LOCK_EX);
+updateNginx($target, $d['root']);
