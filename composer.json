@@ -1,15 +1,23 @@
 {
-    "name": "wiiin0de/dom-nginx",
-    "authors": [
-        {
-            "name": "Wildan M",
-            "email": "willnode@wellosoft.net"
-        }
-    ],
-    "require": {
-        "madkom/nginx-configurator": "1.0.0-RC1",
-        "vlucas/phpdotenv": "^5.2"
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+  "name": "wiiin0de/dom-nginx",
+  "authors": [
+    {
+      "name": "Wildan M",
+      "email": "willnode@wellosoft.net"
+    }
+  ],
+  "require": {
+    "madkom/nginx-configurator": "1.0.0-RC1",
+    "vlucas/phpdotenv": "^5.2",
+    "madkom/collection": "^1.0",
+    "madkom/uri": "^1.0",
+    "ferno/loco": "dev-main"
+  },
+  "autoload": {
+    "psr-4": {
+      "Madkom\\NginxConfigurator\\": "nginx-configurator/src/"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }

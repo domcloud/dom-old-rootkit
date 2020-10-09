@@ -4,45 +4,46 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3eb65fe7af8cd22202eef440432c7b8e",
+    "content-hash": "154e007e1e31c7d92d77049b12b7ac69",
     "packages": [
         {
             "name": "ferno/loco",
-            "version": "2.x-dev",
+            "version": "dev-main",
             "source": {
                 "type": "git",
-                "url": "https://github.com/ferno/loco.git",
-                "reference": "1bad0fd5c77e6b94da219fca5f1c5a0ec9194b57"
+                "url": "https://github.com/qntm/loco.git",
+                "reference": "d46e588e46830f47cc457fcf045a02ddb285c529"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ferno/loco/zipball/1bad0fd5c77e6b94da219fca5f1c5a0ec9194b57",
-                "reference": "1bad0fd5c77e6b94da219fca5f1c5a0ec9194b57",
+                "url": "https://api.github.com/repos/qntm/loco/zipball/d46e588e46830f47cc457fcf045a02ddb285c529",
+                "reference": "d46e588e46830f47cc457fcf045a02ddb285c529",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "3.7.21",
-                "squizlabs/php_codesniffer": "1.4.5",
-                "vektah/bugfree-dangerzone": "0.2.6"
+                "jakub-onderka/php-parallel-lint": "0.*",
+                "squizlabs/php_codesniffer": "^2.3"
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "ferno\\loco": "src/main",
-                    "ferno\\loco\\test": "src/test/ferno/loco"
-                }
+                "files": [
+                    "src/Loco.php"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
             "homepage": "http://qntm.org/loco",
             "keywords": [
                 "lexer",
                 "parser",
                 "parsing"
             ],
-            "time": "2014-03-12T19:46:28+00:00"
+            "time": "2019-11-25T00:00:57+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -773,7 +774,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "ferno/loco": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": [],
