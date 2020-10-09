@@ -51,7 +51,7 @@ function mergeConfig($config)
 function updateNginx($domain, $home)
 {
     $home = explode('/', '-'.$home, 4)[3] ?? 'public_html';
-    $ch = curl_init($_SERVER['VIRTUALMIN_PATH']."?domain=$domain&document-dir=$home");
+    $ch = curl_init($_SERVER['VIRTUALMIN_PATH']."?program=modify-web&domain=$domain&document-dir=$home");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_USERPWD, $_SERVER['VIRTUALMIN_AUTH']);
     $response = curl_exec($ch);
