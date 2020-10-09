@@ -128,7 +128,7 @@ $nginx_body = str_replace("\n", "\n\t", trim($nginx_builder->dump()));
 $nginx_new = $nginx_head . $nginx_body . $nginx_foot;
 file_put_contents($_SERVER['NGINX_PATH'], $nginx_new, LOCK_EX);
 // validate
-if (($debug = strpos(updateNginx($target, $d['root']), 'invalid')) !== false) {
+if (strpos($debug = updateNginx($target, $d['root']), 'invalid') !== false) {
     // oops. fallback.
     file_put_contents($_SERVER['NGINX_PATH'], $nginx_file, LOCK_EX);
     updateNginx($target, $d['root']);
