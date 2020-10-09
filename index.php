@@ -77,6 +77,15 @@ foreach ($nginx_conf->getIterator() as $n) {
             return false;
         });
         if ($dir->count()) {
+            // is this GET or POST?
+            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                $nginx_builder = new Builder();
+                $nginx_builder->appendServerNode($n);
+                echo $nginx_builder->dump();
+            }
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                return;
+            }
             // extract data
             $d['dom'] = extractParameters(extractDirective($n, 'server_name')[0])[0];
             $listen = extractDirective($n, 'listen');
@@ -108,9 +117,7 @@ foreach ($nginx_conf->getIterator() as $n) {
             // all necessary data in, now cut
             ob_start();
             include "template.php";
-            $file = ob_get_clean();
-            echo $file;
-            $file = str_replace("\t", "", $file);
+            $file = str_replace("\t", "", ob_get_clean());
             $nginx_builder->appendServerNode(iterator_to_array((new Parser())->parse($file)->getIterator())[0]);
             $found = true;
         } else {
@@ -127,12 +134,11 @@ if (!$found) {
 $nginx_body = str_replace("\n", "\n\t", trim($nginx_builder->dump()));
 $nginx_new = $nginx_head . $nginx_body . $nginx_foot;
 file_put_contents($_SERVER['NGINX_PATH'], $nginx_new, LOCK_EX);
-ob_flush(); // because nginx will immediately restart
 // validate
 if (strpos($debug = updateNginx($target, $d['root']), 'invalid') !== false) {
     // oops. fallback.
     file_put_contents($_SERVER['NGINX_PATH'], $nginx_file, LOCK_EX);
-    updateNginx($target, $d['root']);
     echo "\n\nERROR: YOUR NGINX CONFIGURATION IS INVALID! IT HAS BEEN ROLLED BACK.";
     echo "\nError ".explode("\n", substr($debug, strpos($debug, 'invalid')), 2)[0]."\n";
+    updateNginx($target, $d['root']);
 }
