@@ -16,7 +16,7 @@ if ($_GET['secret'] !== $_SERVER['SECRET_TOKEN']) exit;
 $domain_file = file_get_contents($_SERVER['DOMAINS_PATH'] . str_replace('/', '', ($_GET['domain'])));
 $nginx_file = file_get_contents($_SERVER['NGINX_PATH']);
 if (!$domain_file || !$nginx_file) {
-    echo $domain_file.' '.$nginx_file;
+    echo $_SERVER['DOMAINS_PATH'] . str_replace('/', '', ($_GET['domain']))."\n".$_SERVER['NGINX_PATH'];
     exit;
 }
 
