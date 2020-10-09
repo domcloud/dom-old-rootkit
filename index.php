@@ -108,6 +108,7 @@ foreach ($nginx_conf->getIterator() as $n) {
             ob_start();
             include "template.php";
             $file = ob_get_clean();
+            echo $file;
             $file = str_replace("\t", "", $file);
             $nginx_builder->appendServerNode(iterator_to_array((new Parser())->parse($file)->getIterator())[0]);
         } else {
