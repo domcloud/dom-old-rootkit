@@ -8,6 +8,18 @@ server {
 	index <?= $c['index'] ?>;
 	access_log <?= $d['access_log'] ?>;
 	error_log <?= $d['error_log'] ?>;
+	<?php if (!empty($c['gzip'])) : ?>
+	gzip on;
+	<?php
+	foreach ([
+		'types', 'min_length', 'proxied',
+	] as $key) {
+		if (!empty($c['gzip'][$key])) {
+			echo "\tgzip_$key ".$c['gzip'][$key].";\n";
+		}
+	}
+	?>
+	<?php endif ?>
 	<?php if (!empty($c['passenger'])) : ?>
 	<?php
 	foreach ([
