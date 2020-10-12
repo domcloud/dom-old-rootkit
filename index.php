@@ -134,6 +134,10 @@ if (!$found) {
 // dump
 $nginx_body = str_replace("\n", "\n\t", trim($nginx_builder->dump()));
 $nginx_new = $nginx_head . $nginx_body . $nginx_foot;
+if (($_GET['preview'] ?? '') === 'all') {
+    echo $nginx_new;
+    exit;
+}
 if(file_put_contents($_SERVER['NGINX_PATH'], $nginx_new, LOCK_EX) === false) {
     echo 'ERROR: can\'t write to config';
     exit;
