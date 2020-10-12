@@ -20,7 +20,7 @@ if (!isset($_GET['secret'], $_GET['domain'])) exit;
 if ($_GET['secret'] !== $_SERVER['SECRET_TOKEN']) exit;
 $nginx_file = file_get_contents($_SERVER['NGINX_PATH']);
 if (!$nginx_file) {
-    echo 'not found';
+    echo 'ERROR: config not found';
     exit;
 }
 
@@ -128,13 +128,16 @@ foreach ($nginx_conf->getIterator() as $n) {
 }
 
 if (!$found) {
-    echo 'domain not found';
+    echo 'ERROR: domain not found';
     exit;
 }
 // dump
 $nginx_body = str_replace("\n", "\n\t", trim($nginx_builder->dump()));
 $nginx_new = $nginx_head . $nginx_body . $nginx_foot;
-file_put_contents($_SERVER['NGINX_PATH'], $nginx_new, LOCK_EX);
+if(file_put_contents($_SERVER['NGINX_PATH'], $nginx_new, LOCK_EX) === false) {
+    echo 'ERROR: can\'t write to config';
+    exit;
+}
 // validate (if success, NginX will immeditealy restart, so nothing sent.)
 if (strpos($debug = updateNginx($target, $d['root']), 'invalid') !== false) {
     // oops. fallback.
