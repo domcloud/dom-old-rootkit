@@ -42,7 +42,7 @@ function mergeConfig($config)
         ],
     ];
     if ($config && ($config = json_decode($config, true))) {
-        $c = array_merge_recursive($c, array_map_recursive($config, function ($x) {
+        $c = array_replace_recursive($c, array_map_recursive($config, function ($x) {
             return str_replace(';', '', trim($x));
         }));
     }
