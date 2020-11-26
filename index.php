@@ -20,11 +20,11 @@ if (!isset($_GET['secret'], $_GET['domain'])) exit;
 if ($_GET['secret'] !== $_SERVER['SECRET_TOKEN']) exit;
 $nginx_file = file_get_contents($_SERVER['NGINX_PATH']);
 if (!$nginx_file) {
-    echo 'ERROR: config not found';
-    exit;
+    die('ERROR: config not found');
 }
 
-/** @param Node $server
+/**
+ * @param Node $server
  * @return Location[]
  * */
 function extractLocations($server)
@@ -34,7 +34,8 @@ function extractLocations($server)
     }));
 }
 
-/** @param Node $server
+/**
+ * @param Node $server
  * @return Directive[]
  * */
 function extractDirective($server, $directive)
@@ -43,7 +44,8 @@ function extractDirective($server, $directive)
         return $x instanceof Directive && $x->getName() === $directive;
     }));
 }
-/** @param Directive $directive
+/**
+ * @param Directive $directive
  * @return mixed[]
  * */
 function extractParameters($directive)
@@ -128,24 +130,28 @@ foreach ($nginx_conf->getIterator() as $n) {
 }
 
 if (!$found) {
-    echo 'ERROR: domain not found';
-    exit;
+    die('ERROR: domain not found');
 }
 // dump
 $nginx_body = str_replace("\n", "\n\t", trim($nginx_builder->dump()));
 $nginx_new = $nginx_head . $nginx_body . $nginx_foot;
+
 if (($_GET['preview'] ?? '') === 'all') {
-    echo $nginx_new;
-    exit;
+    die($nginx_new);
 }
-if(file_put_contents($_SERVER['NGINX_PATH'], $nginx_new, LOCK_EX) === false) {
-    echo 'ERROR: can\'t write to config';
-    exit;
+if (file_put_contents($_SERVER['NGINX_PATH'], $nginx_new, LOCK_EX) === false) {
+    die('ERROR: can\'t write to config');
 }
-// validate (if success, NginX will immeditealy restart, so nothing sent.)
-if (strpos($debug = updateNginx($target, $d['root']), 'invalid') !== false) {
+
+// validate
+$validation = shell_exec($_SERVER['NGINX_TEST']);
+if (strpos($validation, 'test is successful') !== false) {
+    // restart
+    exec($_SERVER['NGINX_RELOAD']);
+    echo 'OK';
+} else {
     // oops. fallback.
     file_put_contents($_SERVER['NGINX_PATH'], $nginx_file, LOCK_EX);
-    echo "\n\nERROR: YOUR NGINX CONFIGURATION IS INVALID! IT HAS BEEN ROLLED BACK.";
-    echo "\nError ".explode("\n", substr($debug, strpos($debug, 'invalid')), 2)[0]."\n";
+    echo "\n\nError: YOUR NGINX CONFIGURATION IS INVALID! IT HAS BEEN ROLLED BACK.\n";
+    echo $validation;
 }
