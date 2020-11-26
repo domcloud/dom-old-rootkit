@@ -145,13 +145,13 @@ if (file_put_contents($_SERVER['NGINX_PATH'], $nginx_new, LOCK_EX) === false) {
 
 // validate
 $validation = shell_exec($_SERVER['NGINX_TEST']);
+echo $validation;
 if (strpos($validation, 'test is successful') !== false) {
     // restart
     exec($_SERVER['NGINX_RELOAD']);
-    echo 'OK';
+    echo 'Config applied successfully';
 } else {
     // oops. fallback.
     file_put_contents($_SERVER['NGINX_PATH'], $nginx_file, LOCK_EX);
     echo "\n\nError: YOUR NGINX CONFIGURATION IS INVALID! IT HAS BEEN ROLLED BACK.\n";
-    echo $validation;
 }
