@@ -61,8 +61,8 @@ server {
 	}
     <?php endforeach ?>
 	<?php if ($c['ssl'] !== 'off') : ?>
-	listen <?= $d['ip'] ?>:443 ssl;
-	listen <?= $d['ip6'] ?>:443 ssl;
+	listen <?= $d['ip'] ?>:443 ssl http2;
+	listen <?= $d['ip6'] ?>:443 ssl http2;
     <?php endif ?>
     <?php if (isset($d['ssl'])) : ?>
 	ssl_certificate <?= $d['ssl']['cert'] ?>;
