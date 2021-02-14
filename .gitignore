@@ -1,3 +1,6 @@
 .env
 vendor
 nginx.*
+test.php
+a.txt
+.vscode

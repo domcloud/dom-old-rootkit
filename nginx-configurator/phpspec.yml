@@ -1,5 +1,0 @@
-suites:
-  types:
-    namespace: Madkom\NginxConfigurator
-    psr4_prefix: Madkom\NginxConfigurator
-    spec_path: tests
