@@ -37,6 +37,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     return;
 }
 
+$config = $_POST['data'] ?? file_get_contents('php://input');
+if ($config === 'reload') {
+    exec($_SERVER['NGINX_RELOAD']);
+    echo 'Config reloaded successfully';
+    return;
+}
+
 // extract data
 $d['dom'] = $target;
 $matches = [];
@@ -61,7 +68,7 @@ if (preg_match('/^\t\t\tfastcgi_pass (.+);/m', $serv, $matches) === false) {
     die("ERROR: No 'fastcgi_pass' was detected");
 }
 $d['fcgi'] = $matches[1];
-$c = mergeConfig($_POST['data'] ?? file_get_contents('php://input'));
+$c = mergeConfig($config);
 $c['locations'][] = [
     'match' => '~ \.php(/|$)',
     'try_files' => '$uri =404',
