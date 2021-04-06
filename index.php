@@ -54,13 +54,7 @@ foreach (['root', 'index', 'access_log', 'error_log'] as $variable) {
     }
     $d[$variable] = $matches[1];
 }
-$matches = [];
-if (preg_match('/^\t\tssl_certificate (.+);/m', $serv, $matches) !== false) {
-    $d['ssl']['cert'] = $matches[1];
-    $matches = [];
-    preg_match('/^\t\tssl_certificate_key (.+);/m', $serv, $matches);
-    $d['ssl']['key'] = $matches[1];
-}
+$d['user'] = explode('/', $d['root'])[2];
 // extract location
 $matches = [];
 if (preg_match('/^\t\t\tfastcgi_pass (.+);/m', $serv, $matches) === false) {

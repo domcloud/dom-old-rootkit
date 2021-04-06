@@ -10,7 +10,7 @@
 		access_log <?= $d['access_log'] ?>;
 		error_log <?= $d['error_log'] ?>;
 <?php if (!empty($c['gzip'])) : ?>
-		gzip on;
+		gzip <?= $c['gzip'] === 'off' ? 'off' : 'on'?>;
 <?php
 foreach ([
 	'types', 'min_length', 'proxied',
@@ -28,14 +28,14 @@ foreach ([
 		'meteor_app_settings', 'friendly_error_pages',
 	] as $key) {
 		if (!empty($c['passenger'][$key])) {
-			echo "\tpassenger_$key ".$c['passenger'][$key].";\n";
+			echo "\t\tpassenger_$key ".$c['passenger'][$key].";\n";
 		}
 	}
 	foreach (($c['passenger']['env_vars'] ?? []) as $env) {
-		echo "\tpassenger_env_var ".$env.";\n";
+		echo "\t\tpassenger_env_var ".$env.";\n";
 	}
 	if (!empty($c['passenger']['app_start_command'])) {
-		echo "\tpassenger_app_start_command ".escapeshellarg($c['passenger']['app_start_command']).";\n";
+		echo "\t\tpassenger_app_start_command ".escapeshellarg($c['passenger']['app_start_command']).";\n";
 	}
 } ?>
 <?php foreach ($c['error_pages'] as $e) : ?>
@@ -65,8 +65,11 @@ foreach ([
 		listen <?= $d['ip'] ?>:443 ssl http2;
 		listen <?= $d['ip6'] ?>:443 ssl http2;
 <?php endif ?>
-<?php if (isset($d['ssl'])) : ?>
-		ssl_certificate <?= $d['ssl']['cert'] ?>;
-		ssl_certificate_key <?= $d['ssl']['key'] ?>;
+<?php if (isset($c['ssl_certificate'])) : foreach ($c['ssl_certificate'] as $cs) : ?>
+		ssl_certificate /home/<?= $d['user'] ?>/<?= trim(str_replace('..', '', $cs['cert'] ?? ''), '/') ?>;
+		ssl_certificate_key /home/<?= $d['user'] ?>/<?= trim(str_replace('..', '', $cs['key'] ?? ''), '/') ?>;
+<?php endforeach; else : ?>
+		ssl_certificate /home/<?= $d['user'] ?>/ssl.combined;
+		ssl_certificate_key /home/<?= $d['user'] ?>/ssl.key;
 <?php endif ?>
 	}

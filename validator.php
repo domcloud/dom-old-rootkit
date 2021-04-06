@@ -10,7 +10,16 @@ function array_map_recursive(&$arr, $fn)
 function mergeConfig($config)
 {
     $c = [
-        'ssl' => 'on', // [off|on|enforce]
+        /**
+         * Every configuration won't be pertained if you redeploy.
+         *  e.g. if last config is "ssl: enforce" then the next deploy you
+         *  forgot to set it, it will back to "ssl: on".
+         */
+        'ssl' => 'on', // [off|on (default)|enforce]
+        'ssl_certificate' => [
+            // 'cert' => 'ssl.combined',
+            // 'key' => 'ssl.key',
+        ],
         'passenger' => [
             /*
                 The only config you care is "enabled"
@@ -28,15 +37,24 @@ function mergeConfig($config)
             // 'meteor_app_settings' => '', // (for meteors users)
             // 'friendly_error_pages' => 'on', // [off|on (default)]
         ],
-        'index' => 'index.html index.htm index.php',
+        'gzip' => [
+            /* Gzip is on by default. To turn it off use "gzip: off" */
+            // 'types' => 'text/css application/javascript image/svg+xml',
+            // 'min_length' => 1024,
+            // 'proxied' => 'off',
+        ],
+        'index' => 'index.html index.php',
         'locations' => [
             // [
             //     'match' => '/',
             //     'try_files' => '$uri $uri/ /index.php?$is_args$args',
             //     'return' => '301 http://example.com',
+            //     'root' => 'other_public_html',
+            //     'alias' => 'other_public_html',
             // ]
         ],
         'error_pages' => [
+            /* Usually useful for static file deployment */
             // '404 /404.html',
             // '500 503 /50x.html',
         ],
@@ -51,6 +69,12 @@ function mergeConfig($config)
         unset($x['fastcgi_pass']);
         return $x;
     }, $c['locations']);
-    $c['index'] = $c['index'] ?: 'index.html index.htm index.php';
+    $c['index'] = $c['index'] ?: 'index.html index.php';
+    if (isset($c['ssl_certificate']['cert'], $c['ssl_certificate']['key'])) {
+        // in case some people want 'multi cert' usage
+        $c['ssl_certificate'][0] = $c['ssl_certificate'];
+    } else if (count($c['ssl_certificate'] ?? []) == 0) {
+        unset($c['ssl_certificate']);
+    }
     return $c;
 }
