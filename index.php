@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $config = $_POST['data'] ?? file_get_contents('php://input');
-if ($config === 'reload') {
+if ($config === '"reload"') {
     exec($_SERVER['NGINX_RELOAD']);
     echo 'Config reloaded successfully';
     return;
