@@ -1,6 +1,7 @@
 .env
 vendor
-nginx.*
+nginx.conf
+nginx.ori.conf
 test.php
 a.txt
 .vscode

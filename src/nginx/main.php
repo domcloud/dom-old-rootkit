@@ -1,9 +1,9 @@
 <?php
 
-require_once "vendor/autoload.php";
+require_once "../vendor/autoload.php";
 require "validator.php";
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv\Dotenv::createImmutable(realpath(__DIR__.'/../../'));
 $dotenv->load();
 
 // validate request
