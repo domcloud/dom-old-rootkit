@@ -1,3 +1,6 @@
+#!/bin/bash
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 ipset flush whitelist
 while read p; do
@@ -8,4 +11,4 @@ while read p; do
         ipset add whitelist $q
     done < <(echo $FFI| sed 's/ /\n/g')
   fi
-done <whitelist.conf
+done <"$SCRIPT_DIR/whitelist.conf"
