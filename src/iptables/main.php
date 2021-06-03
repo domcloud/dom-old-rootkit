@@ -18,9 +18,11 @@ if ($_GET['action'] === 'refresh') {
     if (!$iptables_file) {
         die('ERROR: config not found');
     }
-    $replaced_file = str_replace("# Limiter goes down here\n", "# Limiter goes down here\n"."-A OUTPUT -m owner --uid-owner $_SERVER[user] -j REJECT\n", $iptables_file, 1);
+    $theword = "-A OUTPUT -m owner --uid-owner $_GET[user] -j REJECT\n";
+    $replaced_file = str_replace($theword, "", $iptables_file, 1);
+    $replaced_file = str_replace("# Limiter goes down here\n", "# Limiter goes down here\n".$theword, $replaced_file, 1);
     if ($iptables_file === $replaced_file) {
-        die('ERROR: can\'t find insert table point');
+        die('Updated, nothing changed');
     }
     if (file_put_contents($_SERVER['IPTABLES_PATH'], $replaced_file, LOCK_EX) === false) {
         die('ERROR: unable to write config');
@@ -32,9 +34,9 @@ if ($_GET['action'] === 'refresh') {
     if (!$iptables_file) {
         die('ERROR: config not found');
     }
-    $replaced_file = str_replace("-A OUTPUT -m owner --uid-owner $_SERVER[user] -j REJECT\n", "", $iptables_file, 1);
+    $replaced_file = str_replace("-A OUTPUT -m owner --uid-owner $_GET[user] -j REJECT\n", "", $iptables_file, 1);
     if ($iptables_file === $replaced_file) {
-        die('ERROR: can\'t remove table point');
+        die('Updated, Nothing changed');
     }
     if (file_put_contents($_SERVER['IPTABLES_PATH'], $replaced_file, LOCK_EX) === false) {
         die('ERROR: unable to write config');
