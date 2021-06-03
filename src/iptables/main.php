@@ -1,7 +1,6 @@
 <?php
 
 require_once "../vendor/autoload.php";
-require "validator.php";
 
 $dotenv = Dotenv\Dotenv::createImmutable(realpath(__DIR__ . '/../../'));
 $dotenv->load();
@@ -19,8 +18,8 @@ if ($_GET['action'] === 'refresh') {
         die('ERROR: config not found');
     }
     $theword = "-A OUTPUT -m owner --uid-owner $_GET[user] -j REJECT\n";
-    $replaced_file = str_replace($theword, "", $iptables_file, 1);
-    $replaced_file = str_replace("# Limiter goes down here\n", "# Limiter goes down here\n".$theword, $replaced_file, 1);
+    $replaced_file = str_replace($theword, "", $iptables_file);
+    $replaced_file = str_replace("# Limiter goes down here\n", "# Limiter goes down here\n".$theword, $replaced_file);
     if ($iptables_file === $replaced_file) {
         die('Updated, nothing changed');
     }
@@ -34,7 +33,7 @@ if ($_GET['action'] === 'refresh') {
     if (!$iptables_file) {
         die('ERROR: config not found');
     }
-    $replaced_file = str_replace("-A OUTPUT -m owner --uid-owner $_GET[user] -j REJECT\n", "", $iptables_file, 1);
+    $replaced_file = str_replace("-A OUTPUT -m owner --uid-owner $_GET[user] -j REJECT\n", "", $iptables_file);
     if ($iptables_file === $replaced_file) {
         die('Updated, Nothing changed');
     }
