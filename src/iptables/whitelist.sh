@@ -15,14 +15,14 @@ while read p; do
     while read -r q; do
       if [[ $q != "" ]];
       then
-        ipset add whitelist $q
+        ipset -! add whitelist $q
       fi
     done < <(echo $FFI| sed 's/ /\n/g')
     FFI6=`dig +short AAAA $(echo $p | xargs) | grep -v '\.$'`
     while read -r q; do
       if [[ $q != "" ]];
       then
-        ipset add whitelist-v6 $q
+        ipset -! add whitelist-v6 $q
       fi
     done < <(echo $FFI6| sed 's/ /\n/g')
   fi
