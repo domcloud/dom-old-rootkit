@@ -1,1 +1,8 @@
-<?php include "../src/nginx/main.php";
+<?php
+
+require_once "../vendor/autoload.php";
+
+$dotenv = Dotenv\Dotenv::createImmutable(realpath(__DIR__ . '/../'));
+$dotenv->load();
+
+include "../src/nginx/main.php";
