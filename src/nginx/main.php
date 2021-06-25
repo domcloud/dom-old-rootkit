@@ -64,11 +64,20 @@ if (preg_match('/^\t+fastcgi_pass (.+);/m', $serv, $matches) === false) {
 }
 $d['fcgi'] = $matches[2];
 $c = mergeConfig($config);
-$c['locations'][] = [
-    'match' => '~ \.php(/|$)',
-    'try_files' => $c['fastcgi'] == 'on' ? '$uri =404' : '=404',
-    'fastcgi_pass' => $d['fcgi'],
-];
+if ($c['fastcgi'] == 'on') {
+    $c['locations'][] = [
+        'match' => '~ \.php(/|$)',
+        'try_files' => '$uri =404',
+        'fastcgi_pass' => $d['fcgi'],
+    ];
+} else {
+    $c['locations'][] = [
+        'match' => '~ \.php(/|$)',
+        'return' => '404',
+        'fastcgi_pass' => $d['fcgi'],
+    ];
+}
+
 // all necessary data in, now cut
 ob_start();
 include "template.php";
