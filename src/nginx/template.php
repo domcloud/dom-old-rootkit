@@ -61,6 +61,9 @@ foreach ([
 ?>
 		}
 <?php endforeach ?>
+<?php if ($c['fastcgi'] === 'off') : ?>
+		// fastcgi_pass <?= $d['fcgi'] ?>;
+<?php endif ?>
 <?php if ($c['ssl'] !== 'off') : ?>
 		listen <?= $d['ip'] ?>:443 ssl http2;
 		listen <?= $d['ip6'] ?>:443 ssl http2;

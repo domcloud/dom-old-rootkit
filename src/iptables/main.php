@@ -6,7 +6,14 @@ if (!isset($_GET['secret'], $_GET['action'])) exit;
 if ($_GET['secret'] !== $_SERVER['SECRET_TOKEN']) exit;
 if ($_GET['action'] === 'refresh') {
     exec($_SERVER['IPTABLES_REFRESH']);
-    echo "Updated";
+    echo "Updated for IPv4\n";
+} else if ($_GET['action'] === 'check') {
+    $iptables_file = file_get_contents($_SERVER['IPTABLES_PATH']);
+    if (!$iptables_file) {
+        die('ERROR: config not found');
+    }
+    $theword = "-A OUTPUT -m owner --uid-owner $_GET[user] -j REJECT\n";
+    die(str_contains($iptables_file, $theword) ? '1' : '0');
 } else if ($_GET['action'] === 'add_user') {
     $iptables_file = file_get_contents($_SERVER['IPTABLES_PATH']);
     if (!$iptables_file) {
@@ -22,7 +29,7 @@ if ($_GET['action'] === 'refresh') {
         die('ERROR: unable to write config');
     }
     exec($_SERVER['IPTABLES_RELOAD']);
-    echo "Updated";
+    echo "Updated for IPv4\n";
 } else if ($_GET['action'] === 'del_user') {
     $iptables_file = file_get_contents($_SERVER['IPTABLES_PATH']);
     if (!$iptables_file) {
@@ -36,5 +43,5 @@ if ($_GET['action'] === 'refresh') {
         die('ERROR: unable to write config');
     }
     exec($_SERVER['IPTABLES_RELOAD']);
-    echo "Updated";
+    echo "Updated for IPv4\n";
 }

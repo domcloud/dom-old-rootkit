@@ -59,16 +59,18 @@ foreach (['root', 'index', 'access_log', 'error_log'] as $variable) {
 $d['user'] = explode('/', $d['root'])[2];
 // extract location
 $matches = [];
-if (preg_match('/^\t\t\tfastcgi_pass (.+);/m', $serv, $matches) === false) {
+if (preg_match('/^\t\t(\/\/ |\t)fastcgi_pass (.+);/m', $serv, $matches) === false) {
     die("ERROR: No 'fastcgi_pass' was detected");
 }
-$d['fcgi'] = $matches[1];
+$d['fcgi'] = $matches[2];
 $c = mergeConfig($config);
-$c['locations'][] = [
-    'match' => '~ \.php(/|$)',
-    'try_files' => '$uri =404',
-    'fastcgi_pass' => $d['fcgi'],
-];
+if ($c['fastcgi'] == 'on') {
+    $c['locations'][] = [
+        'match' => '~ \.php(/|$)',
+        'try_files' => '$uri =404',
+        'fastcgi_pass' => $d['fcgi'],
+    ];
+}
 // all necessary data in, now cut
 ob_start();
 include "template.php";

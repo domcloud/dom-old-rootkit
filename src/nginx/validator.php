@@ -16,6 +16,7 @@ function mergeConfig($config)
          *  forgot to set it, it will back to "ssl: on".
          */
         'ssl' => 'on', // [off|on (default)|enforce]
+        'fastcgi' => 'on', // [off|on (default)] whether to enable or disable php execution
         'ssl_certificate' => [
             // 'cert' => 'ssl.combined',
             // 'key' => 'ssl.key',
