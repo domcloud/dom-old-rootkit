@@ -59,10 +59,10 @@ foreach (['root', 'index', 'access_log', 'error_log'] as $variable) {
 $d['user'] = explode('/', $d['root'])[2];
 // extract location
 $matches = [];
-if (preg_match('/^\t+fastcgi_pass (.+);/m', $serv, $matches) === false) {
+if (preg_match('/^\t\t\tfastcgi_pass (.+);/m', $serv, $matches) === false || !isset($matches[1])) {
     die("ERROR: No 'fastcgi_pass' was detected");
 }
-$d['fcgi'] = $matches[2];
+$d['fcgi'] = $matches[1];
 $c = mergeConfig($config);
 if ($c['fastcgi'] == 'on') {
     $c['locations'][] = [
