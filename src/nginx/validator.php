@@ -78,7 +78,7 @@ function mergeConfig($config)
         unset($c['ssl_certificate']);
     }
     if ($c['fastcgi'] != 'on') {
-        $c['index'] = str_replace('index.php', '', $c['index']);
+        $c['index'] = trim(str_replace('index.php', '', $c['index']));
     }
     return $c;
 }
