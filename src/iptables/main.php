@@ -12,8 +12,12 @@ if ($_GET['action'] === 'refresh') {
     if (!$iptables_file) {
         die("ERROR: config not found\n");
     }
-    $theword = "-A OUTPUT -m owner --uid-owner $_GET[user] -j REJECT\n";
-    die(str_contains($iptables_file, $theword) ? '1' : '0');
+    $users = explode(',', $_GET['user']);
+    foreach ($users as $user) {
+        $theword = "-A OUTPUT -m owner --uid-owner $user -j REJECT\n";
+        echo str_contains($iptables_file, $theword) ? '1' : '0';
+    }
+    die();
 } else if ($_GET['action'] === 'add_user') {
     $iptables_file = file_get_contents($_SERVER['IPTABLES_PATH']);
     if (!$iptables_file) {
