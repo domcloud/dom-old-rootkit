@@ -57,12 +57,12 @@ foreach ($df as $dfk => $dfv) {
     $df[$dfk] = array_map(function ($x)
     {
         return [
-            'name' => $x[0],
-            'total' => $x[1],
-            'used' => $x[2],
-            'free' => $x[3],
-            'usage' => $x[4],
-            'mount' => $x[5],
+            'name' => $x[1],
+            'total' => $x[2],
+            'used' => $x[3],
+            'free' => $x[4],
+            'usage' => $x[5],
+            'mount' => $x[6],
         ];
     }, $matches);
 }
