@@ -21,10 +21,11 @@ foreach ($check as $s) {
     }
 }
 # uptime
-preg_match("/^\s*(.+) up (.+),  .+ user,  load average: (.+)\s*$/", shell_exec("uptime"), $matches);
+preg_match("/\s*(.+?) up (.+?),  .+? user,  load average: (.+?)\s*/", shell_exec("uptime"), $matches);
 $uptime = [
     'time' => $matches[1] ?? '',
     'up' => $matches[2] ?? '',
+    'core' => intval(rtrim(shell_exec('nproc'))),
     'load' => array_map(function ($x) {
         return floatval(trim($x));
     }, explode(',', $matches[3] ?? '0,0,0')),
@@ -54,8 +55,7 @@ $df = [
 
 foreach ($df as $dfk => $dfv) {
     preg_match_all("/(.+?)\s+(\d+?)\s+(\d+?)\s+(\d+?)\s+(\d+?%)\s+(.+)/", $dfv, $matches, PREG_SET_ORDER);
-    $df[$dfk] = array_map(function ($x)
-    {
+    $df[$dfk] = array_map(function ($x) {
         return [
             'name' => $x[1],
             'total' => $x[2],
