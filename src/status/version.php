@@ -14,11 +14,9 @@ $programs = [
     'tar' => 'tar --version',
     'zip' => 'zip --version',
     'git' => 'git --version',
+    'ssh' => 'ssh -V',
     'openssl' => 'openssl version',
     // services
-    'named' => 'named -v',
-    'iptables' => 'iptables --version',
-    'proftpd' => 'proftpd -v',
     'nginx' => 'nginx -v',
     'mysql' => 'mysql -V',
     'psql' => 'psql -V',
@@ -46,7 +44,7 @@ $programs = [
     'g++' => 'g++ --version',
 ];
 foreach ($programs as $key => $value) {
-    preg_match('/[\d.]+\w*/', shell_exec($value), $match);
+    preg_match('/[\d.]+/', shell_exec($value), $match);
     $programs[$key] = $match[0];
 }
 header('content-type: application/json');
