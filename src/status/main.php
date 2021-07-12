@@ -53,7 +53,7 @@ $df = [
 ];
 
 foreach ($df as $dfk => $dfv) {
-    preg_match_all("/(.+?)\s+(\d+?)\s+(\d+?)\s+(\d+?)\s+(\d+?%)\s+(.+)/", $dfv, $matches);
+    preg_match_all("/(.+?)\s+(\d+?)\s+(\d+?)\s+(\d+?)\s+(\d+?%)\s+(.+)/", $dfv, $matches, PREG_SET_ORDER);
     $df[$dfk] = array_map(function ($x)
     {
         return [
