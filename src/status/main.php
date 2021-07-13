@@ -21,7 +21,7 @@ foreach ($check as $s) {
     }
 }
 # uptime
-preg_match("/(\S+?) up (.+),  .+? user,  load average: (.+)/", shell_exec("uptime"), $matches);
+preg_match("/(\S+?) up (.+),  .+? users?,  load average: (.+)/", shell_exec("uptime"), $matches);
 $uptime = [
     'time' => $matches[1] ?? '',
     'up' => $matches[2] ?? '',
