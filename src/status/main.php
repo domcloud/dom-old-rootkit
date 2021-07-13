@@ -10,13 +10,16 @@ if ($_GET['secret'] !== $_SERVER['SECRET_TOKEN']) exit;
 
 # services
 $check = [
-    'iptables', 'ip6tables', 'mariadb', 'named', 'nginx',
-    'php-fpm', 'postgresql', 'proftpd', 'sshd', 'webmin'
+    'nginx', 'named',
+    'iptables', 'ip6tables',
+    'mariadb', 'postgresql',
+    'php-fpm', 'php56-fpm', 'php80-fpm',
+    'proftpd', 'sshd', 'webmin', 'do-agent',
 ];
 $services = [];
 foreach ($check as $s) {
     $services[$s] = rtrim(shell_exec("systemctl is-active $s"));
-    if ($services[$s] !== 'active') {
+    if ($services[$s] === 'failed') {
         $error = 1;
     }
 }
