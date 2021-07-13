@@ -11,16 +11,19 @@ $programs = [
     'wget' => 'wget -V',
     'nano' => 'nano --version',
     'vim' => 'vim --version',
-    'tar' => 'tar --version',
-    'zip' => 'zip --version',
     'git' => 'git --version',
-    'ssh' => 'ssh -V',
     'openssl' => 'openssl version',
     // services
-    'nginx' => 'nginx -v',
+    'webmin' => 'cat /etc/webmin/version',
+    'virtualmin' => 'cat /usr/libexec/webmin/virtual-server/module.info | grep version',
+    'logrotate' => 'cat /etc/webmin/logrotate/version',
+    'ssh' => 'cat /etc/webmin/sshd/version',
+    'named' => '/usr/sbin/named -v 2>&1',
+    'nginx' => '/usr/local/sbin/nginx -v 2>&1',
     'mysql' => 'mysql -V',
     'psql' => 'psql -V',
     'passenger' => 'passenger -v',
+    'passenger-config' => 'passenger-config about version',
     // language services
     'php' => 'php -v',
     'php56' => 'php56 -v',
@@ -36,6 +39,7 @@ $programs = [
     'npm' => 'npm -v',
     'yarn' => 'yarn -v',
     'ruby' => 'ruby -v',
+    'rake' => 'rake -V',
     'gem' => 'gem -v',
     'go' => 'go version',
     'rustc' => 'rustc -V',
@@ -44,7 +48,7 @@ $programs = [
     'g++' => 'g++ --version',
 ];
 foreach ($programs as $key => $value) {
-    preg_match('/[\d.]+/', shell_exec($value), $match);
+    preg_match('/[\d.]+\d+/', shell_exec($value), $match);
     $programs[$key] = $match[0];
 }
 header('content-type: application/json');
