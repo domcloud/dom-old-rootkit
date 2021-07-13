@@ -61,9 +61,9 @@ foreach ($df as $dfk => $dfv) {
     $df[$dfk] = array_map(function ($x) {
         return [
             'name' => $x[1],
-            'total' => $x[2],
-            'used' => $x[3],
-            'free' => $x[4],
+            'total' => intval($x[2]),
+            'used' => intval($x[3]),
+            'free' => intval($x[4]),
             'usage' => $x[5],
             'mount' => $x[6],
         ];
