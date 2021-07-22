@@ -5,7 +5,7 @@
 if (!isset($_GET['secret'], $_GET['action'])) exit;
 if ($_GET['secret'] !== $_SERVER['SECRET_TOKEN']) exit;
 if ($_GET['action'] === 'refresh') {
-    exec($_SERVER['IPTABLESV6_REFRESH']);
+    exec($_SERVER['IPTABLESV6_RELOAD']);
     echo "Updated for IPv6\n";
 } else if ($_GET['action'] === 'add_user') {
     $iptables_file = file_get_contents($_SERVER['IPTABLESV6_PATH']);

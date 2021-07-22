@@ -5,7 +5,7 @@
 if (!isset($_GET['secret'], $_GET['action'])) exit;
 if ($_GET['secret'] !== $_SERVER['SECRET_TOKEN']) exit;
 if ($_GET['action'] === 'refresh') {
-    exec($_SERVER['IPTABLES_REFRESH']);
+    exec($_SERVER['IPTABLES_RELOAD']);
     echo "Updated for IPv4\n";
 } else if ($_GET['action'] === 'check') {
     $iptables_file = file_get_contents($_SERVER['IPTABLES_PATH']);
