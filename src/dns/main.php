@@ -31,11 +31,13 @@ if ($_GET['action'] === 'refresh') {
     if ($dns_file === $replaced_file) {
         die("Updated, nothing changed\n");
     }
-    if (file_put_contents($_SERVER['DNS_PATH'], $replaced_file, LOCK_EX) === false) {
+    preg_match('/(IN\tSOA.+?)(\d+)/s', $replaced_file, $matches);
+    $replaced_file = preg_replace('/(IN\tSOA.+?)(\d+)/s', '$1'.(intval($matches[2]) + 1), $replaced_file, 1);
+    if (!$replaced_file || file_put_contents($_SERVER['DNS_PATH'], $replaced_file, LOCK_EX) === false) {
         die("ERROR: unable to write config\n");
     }
     exec($_SERVER['DNS_RELOAD']);
-    echo "Updated for A Record\n";
+    echo "Updated for $record Record\n";
 } else if ($_GET['action'] === 'del') {
     $dns_file = file_get_contents($_SERVER['DNS_PATH']);
     if (!$dns_file) {
@@ -50,9 +52,11 @@ if ($_GET['action'] === 'refresh') {
     if ($dns_file === $replaced_file) {
         die("Updated, Nothing changed\n");
     }
-    if (file_put_contents($_SERVER['DNS_PATH'], $replaced_file, LOCK_EX) === false) {
+    preg_match('/(IN\tSOA.+?)(\d+)/s', $replaced_file, $matches);
+    $replaced_file = preg_replace('/(IN\tSOA.+?)(\d+)/s', '$1'.(intval($matches[2]) + 1), $replaced_file, 1);
+    if (!$replaced_file || file_put_contents($_SERVER['DNS_PATH'], $replaced_file, LOCK_EX) === false) {
         die("ERROR: unable to write config\n");
     }
     exec($_SERVER['DNS_RELOAD']);
-    echo "Updated for A Record\n";
+    echo "Updated for $record Record\n";
 }
