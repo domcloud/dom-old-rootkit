@@ -16,6 +16,11 @@ if ($_GET['action'] === 'refresh') {
     $theword = "$_GET[host].domcloud.io.\tIN\t$record\t$_GET[value]\n";
     echo str_contains($dns_file, $theword) ? '1' : '0';
     die();
+} else if ($_GET['action'] === 'retransfer') {
+    if (!isset($_SERVER['DNS_RETRANSFER']) || !preg_match('/^[\w.]+$/', $_GET['domain']))
+        exit;
+    exec($_SERVER['DNS_RETRANSFER'] . ' ' . $_GET['domain']);
+    die('OK');
 } else if ($_GET['action'] === 'add') {
     $dns_file = file_get_contents($_SERVER['DNS_PATH']);
     if (!$dns_file) {
@@ -32,7 +37,7 @@ if ($_GET['action'] === 'refresh') {
         die("Updated, nothing changed\n");
     }
     preg_match('/(IN\tSOA.+?)(\d+)/s', $replaced_file, $matches);
-    $replaced_file = preg_replace('/(IN\tSOA.+?)(\d+)/s', '${1}'.(intval($matches[2]) + 1), $replaced_file, 1);
+    $replaced_file = preg_replace('/(IN\tSOA.+?)(\d+)/s', '${1}' . (intval($matches[2]) + 1), $replaced_file, 1);
     if (!$replaced_file || file_put_contents($_SERVER['DNS_PATH'], $replaced_file, LOCK_EX) === false) {
         die("ERROR: unable to write config\n");
     }
@@ -53,7 +58,7 @@ if ($_GET['action'] === 'refresh') {
         die("Updated, Nothing changed\n");
     }
     preg_match('/(IN\tSOA.+?)(\d+)/s', $replaced_file, $matches);
-    $replaced_file = preg_replace('/(IN\tSOA.+?)(\d+)/s', '${1}'.(intval($matches[2]) + 1), $replaced_file, 1);
+    $replaced_file = preg_replace('/(IN\tSOA.+?)(\d+)/s', '${1}' . (intval($matches[2]) + 1), $replaced_file, 1);
     if (!$replaced_file || file_put_contents($_SERVER['DNS_PATH'], $replaced_file, LOCK_EX) === false) {
         die("ERROR: unable to write config\n");
     }
