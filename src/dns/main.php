@@ -32,7 +32,7 @@ if ($_GET['action'] === 'refresh') {
         die("Updated, nothing changed\n");
     }
     preg_match('/(IN\tSOA.+?)(\d+)/s', $replaced_file, $matches);
-    $replaced_file = preg_replace('/(IN\tSOA.+?)(\d+)/s', '$1'.(intval($matches[2]) + 1), $replaced_file, 1);
+    $replaced_file = preg_replace('/(IN\tSOA.+?)(\d+)/s', '${1}'.(intval($matches[2]) + 1), $replaced_file, 1);
     if (!$replaced_file || file_put_contents($_SERVER['DNS_PATH'], $replaced_file, LOCK_EX) === false) {
         die("ERROR: unable to write config\n");
     }
@@ -53,7 +53,7 @@ if ($_GET['action'] === 'refresh') {
         die("Updated, Nothing changed\n");
     }
     preg_match('/(IN\tSOA.+?)(\d+)/s', $replaced_file, $matches);
-    $replaced_file = preg_replace('/(IN\tSOA.+?)(\d+)/s', '$1'.(intval($matches[2]) + 1), $replaced_file, 1);
+    $replaced_file = preg_replace('/(IN\tSOA.+?)(\d+)/s', '${1}'.(intval($matches[2]) + 1), $replaced_file, 1);
     if (!$replaced_file || file_put_contents($_SERVER['DNS_PATH'], $replaced_file, LOCK_EX) === false) {
         die("ERROR: unable to write config\n");
     }
