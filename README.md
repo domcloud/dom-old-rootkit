@@ -1,6 +1,6 @@
 # dom-nginx
 
-This a tool to manage NginX config file in per-server basis. It also validates 
+This a tool to manage NginX config file in per-server basis. It also validates
 every input config it receives so there's no way to broke the whole server or
 circumvent the limited config available to individual.
 
@@ -10,7 +10,7 @@ Virtualmin and R/W access to your nginx.conf file.
 
 ## Config
 
-It receives config using JSON, but because DOM Cloud config uses yaml, so we use YAML here. You can also see [available config here](validator.php)
+It receives config using JSON, but because DOM Cloud config uses yaml, so we use YAML here. You can also see [available config here](src/nginx/validator.php)
 
 Available values:
 
