@@ -5,3 +5,6 @@ nginx.ori.conf
 test.php
 a.txt
 .vscode
+/phpmyadmin
+/phppgadmin
+/webssh
