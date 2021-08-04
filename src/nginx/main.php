@@ -17,7 +17,7 @@ $target = $_GET['domain'];
 $nginx_file = str_replace("\r", "", $nginx_file);
 $nginx_file = str_replace('    ', "\t", $nginx_file);
 $matches = [];
-if (!preg_match('/\n	server {\n\t\tserver_name ' . str_replace('.', '\.', $target) . '.+?\n\t}/s', $nginx_file, $matches)) {
+if (!preg_match('/\n\s*server {\n\s*server_name ' . str_replace('.', '\.', $target) . '.+?\n\t}/s', $nginx_file, $matches)) {
     die('ERROR: domain not found');
 }
 $serv = $matches[0];
@@ -42,7 +42,7 @@ if ($config === '"reload"') {
 // extract data
 $d['dom'] = $target;
 $matches = [];
-if (preg_match_all('/^\t\tlisten (.+?)( ssl)?( http2)?;/m', $serv, $matches) === false) {
+if (preg_match_all('/^\s*listen (.+?)( ssl)?( http2)?;/m', $serv, $matches) === false) {
     die('ERROR: No "listen" was detected');
 }
 foreach ($matches[1] as $ips) {
@@ -51,7 +51,7 @@ foreach ($matches[1] as $ips) {
 }
 foreach (['root', 'index', 'access_log', 'error_log'] as $variable) {
     $matches = [];
-    if (preg_match('/^\t\t' . $variable . ' (.+);/m', $serv, $matches) === false) {
+    if (preg_match('/^\s*' . $variable . ' (.+);/m', $serv, $matches) === false) {
         die("ERROR: No '$variable' was detected");
     }
     $d[$variable] = $matches[1];
@@ -59,7 +59,7 @@ foreach (['root', 'index', 'access_log', 'error_log'] as $variable) {
 $d['user'] = explode('/', $d['root'])[2];
 // extract location
 $matches = [];
-if (preg_match('/^\t\t\tfastcgi_pass (.+);/m', $serv, $matches) === false || !isset($matches[1])) {
+if (preg_match('/^\s*fastcgi_pass (.+);/m', $serv, $matches) === false || !isset($matches[1])) {
     die("ERROR: No 'fastcgi_pass' was detected");
 }
 $d['fcgi'] = $matches[1];
