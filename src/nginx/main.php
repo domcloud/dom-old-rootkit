@@ -83,9 +83,11 @@ ob_start();
 include "template.php";
 $serv = ob_get_clean();
 
-
 // dump
 $nginx_new = substr($nginx_file, 0, $serv_substart) . $serv . substr($nginx_file, $serv_subend);
+
+// idk why this bug came but we need to fix it
+$nginx_new = str_replace(' default_server;', ";", $nginx_new);
 
 if (($_GET['preview'] ?? '') === 'all') {
     die($nginx_new);
