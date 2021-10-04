@@ -42,7 +42,7 @@ if ($config === '"reload"') {
 // extract data
 $d['dom'] = $target;
 $matches = [];
-if (preg_match_all('/^\s*listen (.+?)( ssl)?( http2)?;/m', $serv, $matches) === false) {
+if (preg_match_all('/^\s*listen (.+?)( ssl)?( http2)?( default_server)?;/m', $serv, $matches) === false) {
     die('ERROR: No "listen" was detected');
 }
 foreach ($matches[1] as $ips) {
